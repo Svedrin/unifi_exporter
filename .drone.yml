@@ -1,0 +1,19 @@
+---
+kind: pipeline
+name: default
+
+steps:
+- name: build docker image
+  image: plugins/docker
+  settings:
+    repo: svedrin/unifi-exporter
+    tags: latest
+    username: svedrin
+    password:
+      from_secret: docker-registry-pw
+    cache_from: "svedrin/unifi-exporter:latest"
+  when:
+    branch: master
+    event:
+      exclude:
+      - pull_request

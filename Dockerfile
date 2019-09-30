@@ -1,12 +1,13 @@
 FROM alpine:latest
 
-EXPOSE 9130
-
 RUN apk add --update --virtual build-deps go git musl-dev && \
-    go get github.com/mdlayher/unifi_exporter/cmd/unifi_exporter && \
-    mv ~/go/bin/unifi_exporter /bin/ && \
-    apk del build-deps && \
-    rm -rf /var/cache/apk/* ~/go/
+    go get github.com/mdlayher/unifi_exporter/cmd/unifi_exporter
 
+FROM alpine:latest
+RUN apk add --no-cache dumb-init
+EXPOSE 9130
+COPY --from=0 /root/go/bin/unifi_exporter /bin/unifi_exporter
+COPY run.sh /run.sh
 USER nobody
-ENTRYPOINT ["/bin/unifi_exporter"]
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["/run.sh"]
