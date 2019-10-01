@@ -17,3 +17,8 @@ steps:
     event:
       exclude:
       - pull_request
+---
+kind: signature
+hmac: 8fce4a6b038b09b770fe984a8443c6fa53431049c2e57ac74989e1a484e1aea9
+
+...
